@@ -1,9 +1,12 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from database.models import Base
+from supabase import create_client
+from config import SUPABASE_URL, SUPABASE_KEY
 
-engine = create_engine("sqlite:///gym.db")
-Session = sessionmaker(bind=engine)
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def init_db():
-    Base.metadata.create_all(engine)
+    # Just test the connection
+    try:
+        supabase.table("members").select("id").limit(1).execute()
+        print("Connected to Supabase successfully.")
+    except Exception as e:
+        print(f"Supabase connection failed: {e}")

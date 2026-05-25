@@ -29,17 +29,19 @@ class MembersWindow(QWidget):
         self.search_bar.textChanged.connect(self._filter)
 
         self.table = QTableWidget()
-        self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["Name", "Phone", "Birthday", "Subscription", "Status"])
+        self.table.setColumnCount(6)
+        self.table.setHorizontalHeaderLabels(["Name", "Branch", "Phone", "Birthday", "Subscription", "Status"])
         self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Fixed)
         self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Fixed)
         self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
         self.table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.Fixed)
-        self.table.setColumnWidth(1, 130)
-        self.table.setColumnWidth(2, 120)
-        self.table.setColumnWidth(3, 110)
-        self.table.setColumnWidth(4, 160)
+        self.table.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeMode.Fixed)
+        self.table.setColumnWidth(1, 100)
+        self.table.setColumnWidth(2, 130)
+        self.table.setColumnWidth(3, 120)
+        self.table.setColumnWidth(4, 110)
+        self.table.setColumnWidth(5, 160)
         self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         self.table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
@@ -113,28 +115,31 @@ class MembersWindow(QWidget):
                 status = f"{days_left} days left"
                 status_color = "#4aaa70"
 
-            sub_label = f"{member.subscription_months} Month{'s' if member.subscription_months > 1 else ''}"
+            sub_label   = f"{member.subscription_months} Month{'s' if member.subscription_months > 1 else ''}"
             birthday_str = member.birthday.strftime("%d %b %Y") if member.birthday else "—"
-            phone_str = member.phone or "—"
+            phone_str   = member.phone or "—"
 
-            name_item  = QTableWidgetItem(f"  {member.name}")
-            phone_item = QTableWidgetItem(f"  {phone_str}")
-            bday_item  = QTableWidgetItem(f"  {birthday_str}")
-            sub_item   = QTableWidgetItem(f"  {sub_label}")
+            name_item   = QTableWidgetItem(f"  {member.name}")
+            branch_item = QTableWidgetItem(f"  {member.branch}")
+            phone_item  = QTableWidgetItem(f"  {phone_str}")
+            bday_item   = QTableWidgetItem(f"  {birthday_str}")
+            sub_item    = QTableWidgetItem(f"  {sub_label}")
             status_item = QTableWidgetItem(f"  {status}")
 
             name_item.setData(Qt.ItemDataRole.UserRole, member.id)
+            branch_item.setForeground(QColor("#a0a8d0"))
             sub_item.setForeground(QColor("#7a9ad0"))
             status_item.setForeground(QColor(status_color))
 
-            for item in [name_item, phone_item, bday_item, sub_item, status_item]:
+            for item in [name_item, branch_item, phone_item, bday_item, sub_item, status_item]:
                 item.setTextAlignment(Qt.AlignmentFlag.AlignVCenter)
 
             self.table.setItem(row, 0, name_item)
-            self.table.setItem(row, 1, phone_item)
-            self.table.setItem(row, 2, bday_item)
-            self.table.setItem(row, 3, sub_item)
-            self.table.setItem(row, 4, status_item)
+            self.table.setItem(row, 1, branch_item)
+            self.table.setItem(row, 2, phone_item)
+            self.table.setItem(row, 3, bday_item)
+            self.table.setItem(row, 4, sub_item)
+            self.table.setItem(row, 5, status_item)
             self.table.setRowHeight(row, 42)
 
         self.count_label.setText(f"{len(members)} member{'s' if len(members) != 1 else ''}")
