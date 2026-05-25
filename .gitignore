@@ -1,1 +1,5 @@
+assets/qr_codes/
 config.py
+venv/
+__pycache__/
+*.pyc
